@@ -1,157 +1,127 @@
-var gulp = require("gulp"),
-    connect = require("gulp-connect"),
-    opn = require("opn"),
-    sass = require("gulp-sass"),
-    pug = require("gulp-pug");
+const { src, dest, parallel, series, watch } = require("gulp");
+const sass = require("gulp-sass");
+const pug = require("gulp-pug");
+const rimraf = require("rimraf");
+const uglify = require("gulp-uglify-es").default;
+const autoprefixer = require("gulp-autoprefixer");
+const cssmin = require("gulp-cssmin");
+const rigger = require("gulp-rigger");
+const cache = require("gulp-cache");
+const browserSync = require("browser-sync").create();
+const pugbem = require("gulp-pugbem");
+const babel = require("gulp-babel");
+const imagemin = require("gulp-imagemin");
+const pngquant = require("imagemin-pngquant");
 
-var gulpFilter = require('gulp-filter'),
-    rename = require('gulp-rename'),
-    rimraf = require('rimraf'),
-    uglify = require('gulp-uglify'),
-    autoprefixer = require('gulp-autoprefixer'),
-    cssmin = require('gulp-cssmin'),
-    imagemin = require('gulp-imagemin'),
-    pngquant = require('imagemin-pngquant'),
-    watch = require('gulp-watch'),
-    rigger = require('gulp-rigger'),
-    sourcemaps = require('gulp-sourcemaps');
+const src_path = "src";
+const dest_path = "build";
+pugbem.m = "--";
 
-var dest_path = 'public';
 function log(error) {
-    console.log([
-        '',
-        "----------ERROR MESSAGE START----------",
-        ("[" + error.name + " in " + error.plugin + "]"),
-        error.message,
-        "----------ERROR MESSAGE END----------",
-        ''
-    ].join('\n'));
-    this.end();
+  console.log(
+    [
+      "",
+      "----------ERROR MESSAGE START----------",
+      "[" + error.name + " in " + error.plugin + "]",
+      error.message,
+      "----------ERROR MESSAGE END----------",
+      ""
+    ].join("\n")
+  );
+  this.end();
 }
-// Работа с pug
-gulp.task('pug', function() {
-    gulp.src('app/templates/*.pug')
-        .pipe(pug({pretty: true}))
-        .on('error', log)
-        .pipe(gulp.dest(dest_path + '/'))
-        .pipe(connect.reload());
-});
 
-var autoprefixerOptions = {
-    browsers: ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4']
-};
-// Работа с Sass
-gulp.task('sass', function() {
-    gulp.src('app/sass/*.scss')
-        .pipe( sass().on( 'error', function( error )
+function html() {
+  return src(`${src_path}/templates/*.pug`)
+    .pipe(pug({ pretty: true, plugins: [pugbem] }))
+    .on("error", log)
+    .pipe(dest(`${dest_path}/`))
+    .pipe(browserSync.stream());
+}
+
+function css() {
+  return src(`${src_path}/scss/style.scss`)
+    .pipe(
+      sass().on("error", function(error) {
+        console.log(error);
+      })
+    )
+    .pipe(sass().on("error", sass.logError))
+    .pipe(
+      autoprefixer({
+        overrideBrowserslist: ["> 1%", "ie 11"]
+      })
+    )
+    .pipe(cssmin())
+    .pipe(dest(dest_path))
+    .pipe(browserSync.stream());
+}
+
+function js() {
+  return src(`${src_path}/js/script.js`, { sourcemaps: true })
+    .pipe(rigger())
+    .pipe(
+      babel({
+        presets: [
+          [
+            "@babel/preset-env",
             {
-                console.log( error );
-            } )
-        )
-        .pipe(sass({
-            // sourceComments: 'map'
-        }))
-        //        .pipe(prefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-        .pipe(sass().on('error', sass.logError))
-        .pipe(autoprefixer(autoprefixerOptions))
-        .pipe(cssmin())
-        .pipe(gulp.dest( dest_path ))
-        .pipe(connect.reload());
-});
+              targets: "> 1%, not dead"
+            }
+          ]
+        ]
+      })
+    )
+    .pipe(uglify())
+    .pipe(dest(`${dest_path}/js/`, { sourcemaps: true }))
+    .pipe(browserSync.stream());
+}
+function img() {
+  return src(`${src_path}/img/**/*.*`)
+    .pipe(
+      cache(
+        imagemin({
+          progressive: true,
+          svgoPlugins: [{ removeViewBox: false }],
+          use: [pngquant()],
+          interlaced: true
+        })
+      )
+    )
+    .pipe(dest(`${dest_path}/img/`))
+    .pipe(browserSync.stream());
+}
 
-// Работа с js
-gulp.task('js', function() {
-    gulp.src('./app/js/scripts.js')
-        .pipe(rigger())
-        .pipe(uglify())
-        .pipe(gulp.dest( dest_path + '/js/'))
-        .pipe(connect.reload());
-});
+function fonts() {
+  return src(`${src_path}/fonts/**/*.*`)
+    .pipe(dest(`${dest_path}/fonts/`))
+    .pipe(browserSync.stream());
+}
 
-// Сборка IMG
-gulp.task('image', function () {
-    gulp.src('./app/images/**/*.*') //Выберем наши картинки
-        .pipe(imagemin({ //Сожмем их
-            progressive: true,
-            svgoPlugins: [{removeViewBox: false}],
-            use: [pngquant()],
-            interlaced: true
-        }))
-        .pipe(gulp.dest(dest_path + '/images/')) //И бросим в public/images/
-        .pipe(connect.reload());
-});
+function server() {
+  browserSync.init({
+    server: dest_path,
+    browser: "chrome",
+    notify: false
+  });
+}
 
-// Сборка Fonts
-gulp.task('fonts', function () {
-    gulp.src('./app/fonts/**/*.*')
-        .pipe(gulp.dest(dest_path + '/fonts/')) //И бросим в public/css/fonts/
-        .pipe(connect.reload());
-});
+function watcher() {
+  server();
+  watch(`${src_path}/img/**/*.*`, img);
+  watch(`${src_path}/templates/**/*.pug`, html);
+  watch(`${src_path}/scss/**/*.scss`, css);
+  watch(`${src_path}/js/**/*.js`, js);
+}
 
-// Такс запускает одной командой все предыдущие таски
-gulp.task('build', [
-    'pug',
-    'sass',
-    'js',
-    'image',
-    'fonts'
-]);
+function clean(cb) {
+  return rimraf(dest_path, cb);
+}
 
-// Если вы добавите какую-нибудь картинку, потом запустите задачу image и потом картинку удалите — она останется в папке public.
-// Так что было бы удобно — периодически подчищать ее. Создадим для этого простой таск
-gulp.task('clean', function (cb) {
-    rimraf(dest_path, cb);
-});
-
-
-// Слежка
-
-gulp.task('watch', function() {
-    watch(['./app/images/**/*.*'], function(event, cb) {
-        gulp.start('image');
-    });
-    watch(['./app/templates/**/*.pug'], function(event, cb) {
-        gulp.start('pug');
-    });
-    watch(['./app/sass/**/*.scss'], function(event, cb) {
-        gulp.start('sass');
-    });
-    watch(['./app/js/**/*.js'], function(event, cb) {
-        gulp.start('js');
-    });
-    watch(['./app/sass/fonts/**/*.*'], function(event, cb) {
-        gulp.start('fonts');
-    });
-    // gulp.watch(['], ['pug']);
-    // gulp.watch(['./app/sass/**/*.scss'], ['sass']);
-    // gulp.watch(['./app/js/**/*.js'], ['js']);
-    // gulp.watch(['./app/images/**/*.*'], ['image']);
-    // gulp.watch(['./app/sass/fonts/**/*.*'], ['fonts']);
-});
-
-// Запуск сервера c лайврелоадом
-gulp.task('serv_livereload', function() {
-    connect.server({
-        root: dest_path,
-        livereload: true,
-        port: 8888
-    });
-    opn('http://localhost:8888');
-});
-
-// Запуск сервера без лайврелоада
-gulp.task('serv_no_livereload', function() {
-    connect.server({
-        root: dest_path,
-        port: 8888
-    });
-    opn('http://localhost:8888');
-});
-
-
-// Задача по-умолчанию 
-gulp.task('default', ['serv_livereload', 'watch']);
-
-// Для ie
-gulp.task('serv', ['serv_no_livereload', 'watch']);
-
+exports.js = js;
+exports.css = css;
+exports.html = html;
+exports.img = img;
+exports.server = server;
+exports.build = series(clean, parallel(html, css, js, img, fonts));
+exports.default = watcher;

@@ -1,0 +1,38 @@
+html,
+body {
+  height: 100%;
+  background-color: $white;
+}
+body {
+  font-family: $f-OpenSans;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.wrapper {
+  flex-grow: 1;
+}
+
+a {
+  text-decoration: none;
+}
+input:focus,
+textarea:focus {
+  outline: none;
+}
+textarea {
+  resize: vertical;
+}
+.container {
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  max-width: $w-desktop;
+  padding: 0 10px;
+  @media screen and (min-width: $w-tablet) {
+    padding: 0 20px;
+  }
+  @media screen and (min-width: $w-desktop) {
+    padding: 0 30px;
+  }
+}

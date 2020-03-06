@@ -1,0 +1,5 @@
+- var nav = [{url: '/', name: 'Главная'}, {url: 'rooms.html', name: 'Номера'}, {url: '#', name: 'Ресторан'}, {url: '#', name: 'Конференц-зал'}, {url: 'info.html', name: 'Информация'}, {url: 'contacts.html', name: 'Контакты'}];
+
+mixin navItem(url, name, current)
+    li.header-menu__item
+        a.header-menu__link(class=name==current ? 'selected' : '', href=url, title=name)= name
