@@ -4,7 +4,7 @@
             each i in projects
                 .previews__item
                     .previews__item-link.js-preview-item&attributes({'data-preview-theme': i.theme})
-                    .previews__item-image(style=`background-image:url(/img/${i.background})`)
+                    .previews__item-image(style=`background-image:url(img/${i.background})`)
                     h2.previews__item-name= i.name
                     .previews__item-more Подробнее
         button(type="button").btn.btn--dark.previews__load-more Загрузить еще
