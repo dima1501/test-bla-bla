@@ -3,16 +3,22 @@ body {
   height: 100%;
   background-color: $white;
 }
-body {
-  font-family: $f-OpenSans;
+html {
   font-size: 16px;
+}
+body {
+  font-family: $f-DINPro-Regular;
   display: flex;
   flex-direction: column;
 }
 .wrapper {
   flex-grow: 1;
 }
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 a {
   text-decoration: none;
 }
@@ -27,12 +33,12 @@ textarea {
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
-  max-width: $w-desktop;
+  max-width: 1770px;
   padding: 0 10px;
   @media screen and (min-width: $w-tablet) {
     padding: 0 20px;
   }
   @media screen and (min-width: $w-desktop) {
-    padding: 0 30px;
+    padding: 0 60px;
   }
 }

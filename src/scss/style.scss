@@ -6,7 +6,11 @@
 @import "core/base";
 @import "core/header";
 @import "core/footer";
+@import "core/content-area";
+@import "core/btn";
 
-@import "blocks/header-menu";
+@import "blocks/previews";
+@import "blocks/popup";
+@import "blocks/contact-form";
 
 @import "pages/index";

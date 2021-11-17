@@ -77,7 +77,7 @@ function js() {
     .pipe(browserSync.stream());
 }
 function img() {
-  return src(`${src_path}/img/**/*.*`)
+  return src(`${src_path}/images/**/*.*`)
     .pipe(
       cache(
         imagemin({

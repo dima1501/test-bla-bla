@@ -1,12 +1,18 @@
 extends core/_template
 
 append sharedVars
-	- var activeMenu = 'Главная';
+	- var projects = [{background: 'saha.jpg', name: 'республика саха', theme: 'modal_saha_republic', text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique aperiam iste ab in voluptatibus consectetur placeat modi nisi vero molestias, corporis sapiente voluptatem repudiandae quidem velit? Harum maiores odio aspernatur!'}, {background: 'gazprom.jpg', name: 'ГАЗПРОМ', theme: 'modal_gazprom', text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique aperiam iste ab in voluptatibus consectetur placeat modi nisi vero molestias, corporis sapiente voluptatem repudiandae quidem velit? Harum maiores odio aspernatur!'}, {background: 'nokia.jpg', name: 'nokia', theme: 'modal_nokia', text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique aperiam iste ab in voluptatibus consectetur placeat modi nisi vero molestias, corporis sapiente voluptatem repudiandae quidem velit? Harum maiores odio aspernatur!'}];
 
 block title
 	title Главная
 
 block content
-	.workarea workarea
+	.workarea
+		section.content-area
+			h1 РЕАЛИЗОВАННЫЕ ПРОЕКТЫ
+			p Коммуникационное агентство – часть многофункционального холдинга, объединяющего различные компании на территории России и ближнего зарубежья. 
+			p Наши подходы к организации бизнеса и имеющиеся ресурсы позволяют одинаково эффективно обеспечивать реализацию как крупномасштабных федеральных или международных проектов, так и решать небольшие локальные задачи. Мы находимся в постоянном развитии, расширяя и укрепляя имеющиеся бизнес-направления, а также формируя новые.
 
+		include blocks/_previews
+			
 	//end workarea

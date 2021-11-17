@@ -1,0 +1,114 @@
+.previews {
+    padding-bottom: 80px;
+    @media screen and (min-width: $w-desktop-l) {
+        padding-bottom: 106px;
+    }
+    &__row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 60px;
+        @media screen and (min-width: $w-desktop-l) {
+            margin-bottom: 82px;
+        }
+    }
+    &__item {
+        $item: &;
+        position: relative;
+        overflow: hidden;
+        min-width: 270px;
+        flex-grow: 1;
+        @media screen and (min-width: $w-desktop-s) {
+            max-width: 33.3333%;
+        }
+        &:before {
+            content: "";
+            z-index: 2;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 58%;
+            background: linear-gradient(to top, #25364a, transparent);
+            opacity: 0.8;
+            transition: opacity .3s;;
+        }
+        &:after {
+            content: "";
+            display: block;
+            padding-bottom: 105%;
+        }
+        &:hover {
+            #{$item} {
+                &-image {
+                    transform: scale(1.07);
+                }
+                &-name {
+                    transform: translateX(-50%) translateY(-40px);
+                }
+                &-more {
+                    opacity: 1;
+                }
+            }
+            &:before {
+                opacity: 1;
+            }
+        }
+        &-link {
+            position: absolute;
+            z-index: 3;
+            cursor: pointer;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+        }
+        &-image {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            transition: transform 1s;
+            z-index: 1;
+        }
+        &-name {
+            position: absolute;
+            width: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 40px;
+            z-index: 2;
+            color: $white;
+            font-family: $f-DINPro-Bold;
+            text-transform: uppercase;
+            line-height: 1;
+            letter-spacing: 0;
+            font-size: 20px;
+            transition: transform .3s;
+            padding: 0 15px;
+            text-align: center;
+            @media screen and (min-width: $w-desktop-s) {
+                font-size: 24px;
+            }
+        }
+        &-more {
+            position: absolute;
+            z-index: 2;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 20px;
+            color: $white;
+            transition: transform .3s, opacity .3s;;
+            opacity: 0;
+            font-family: $f-DINPro-Bold;
+            padding: 5px 10px;
+            text-transform: uppercase;
+            border: 2px solid $white;
+        }
+    }
+    &__load-more {
+        display: block;
+        margin: 0 auto;
+    }
+}

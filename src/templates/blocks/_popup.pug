@@ -1,0 +1,8 @@
+each i in projects
+    .popup.js-popup(id=`${i.theme}`)
+        .popup__inner
+            .popup__closer.js-popup-closer +
+            img(src=`/img/${i.background}`, alt="").popup__img
+            .popup__content
+                h2.popup__title= i.name
+                p.popup__text= i.text

@@ -11,12 +11,14 @@ html
         meta(name="keywords" content="keywords")
         include _head_style
     body
-        include _header
+        //- include _header
         //end header
         main.wrapper
             block content
             //end content
         include _footer
         //end footer
+        include ../blocks/_popup
+        //end modal
         include _scripts
         //end wrapper

@@ -1,2 +1,24 @@
 footer.footer
-	.container footer
+	.container
+		.footer__inner
+			.footer__main
+				h2.footer__main-title Контакты
+				.footer__main-content
+					.footer__info
+						p.footer__info-text Коммуникационное агентство
+						p.footer__info-text 344000, Россия, г. Ростов-на-Дону ул. Мира, д. 12<br> Бизнес–центр «Рост», оф. 104
+					.footer__contacts
+						.footer__contacts-main 
+							a(href="tel:+7 (861) 300-11-28 ").footer__contacts-phone +7 (861) 300-11-28 
+							a(href="tel:+7 (861) 300-11-28 ").footer__contacts-phone +7 (861) 300-11-28 
+							a(href="tel:+7 (861) 300-11-28 ").footer__contacts-phone +7 (861) 300-11-28
+						.footer__links
+							.footer__links-item
+								.footer__links-item-label Email:
+								a(href="mailto:info@example.com").footer__links-item-link info@example.com
+							.footer__links-item
+								a(href="facebook.com/exampleagency" target="_blank").footer__links-item-link Facebook.com/exampleagency
+
+			.footer__form 
+				include ../blocks/_contact-form
+

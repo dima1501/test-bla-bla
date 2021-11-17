@@ -1,9 +1,16 @@
 //colors
 $black: #000;
 $white: #fff;
+$dark-grey: #243448;
+$light-grey: #344258;
+$dark-blue: #08172d;
+$light-blue: #4c89c1;
+$accent-dark: #0c1c28;
 
 //size
-$w-desktop: 1024px;
+$w-desktop-l: 1600px;
+$w-desktop: 1280px;
+$w-desktop-s: 1024px;
 $w-tablet: 768px;
 $w-mobile: 425px;
 
@@ -18,4 +25,7 @@ $extra-bold: 800;
 $black-w: 900;
 
 //fonts
-$f-OpenSans: "OpenSans", sans-serif;
+$f-DINPro-Regular: "DINPro-Regular", sans-serif;
+$f-DINPro-Bold: "DINPro-Bold", sans-serif;
+$f-DINPro-Medium: "DINPro-Medium", sans-serif;
+$f-MyriadPro-Regular: "MyriadPro-Regular", sans-serif;
